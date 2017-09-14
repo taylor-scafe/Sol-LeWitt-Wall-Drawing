@@ -1,4 +1,4 @@
-# Sol LeWitt – Wall Drawing
+# Sol LeWitt – Wall Drawing 273
 
 American artist Sol LeWitt created an art piece represented through a set of instructions. This art piece consists of random elements and therefor allows for infinite renditions.
 
@@ -9,3 +9,4 @@ This project will consist of the following goals
 -	Create a canvas to allow a user to create their own LeWitt Wall Drawing
 -	Create a database for users to store their created drawings
 -	Extra: Inform users if they have created a unique drawing or if someone else had made it and when.
+![LeWitt Wall Drawing 273](https://github.com/robosheep95/Sol-LeWitt-Wall-Drawing/blob/master/walldrawing01.jpg "LeWitt Wall Drawing 273")

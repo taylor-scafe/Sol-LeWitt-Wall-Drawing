@@ -11,32 +11,26 @@ for (var i = 0; i > sizeX;i++){
     }
 }
 
+function rippleAnimation(){
+    //Get Point clicked
+    var originX = 0;
+    var originY = 0;
+    for(row in pointList){
+        for (point in row){
+            point.showDot();
+        }
+    }
+    //activate animation queue
+    //clear animation queue
+}
+
 var Point = new Object(coordX, coordY)
 
     function Point(){ //Dot Constructor
         this.coordX = coordX
         this.coordY = coordY
     }
-    function showDot(time){
-        //Send animation to animation queue
-        //Positive X and Y Ripple
-        if(coordX + 1 < sizeX){
-            pointList[coordX+1][coordY].showDot(time+timeDelay);
-        }
-        if(coordY + 1 < sizeY){
-            pointList[coordX][coordY+1].showDot(time+timeDelay);
-        }
-        if(coordX + 1 < sizeX && coordY + 1 < sizeY){
-            pointList[coordX+1][coordY+1].showDot(time+timeDelay);
-        }
-        //Negitive X and Y Ripple
-        if(coordX - 1 < 0){
-            pointList[coordX-1][coordY].showDot(time+timeDelay);
-        }
-        if(coordY - 1 < 0){
-            pointList[coordX][coordY-1].showDot(time+timeDelay);
-        }
-        if(coordX - 1 < 0 && coordY - 1 < 0){
-            pointList[coordX-1][coordY-1].showDot(time+timeDelay);
-        }
+    function showDot(originX, originY){
+        var animationTime = (Math.max(Math.abs(this.coordX-originX),Math.abs(this.coordY-originY)))
+        //Queue animation at animation time
     }

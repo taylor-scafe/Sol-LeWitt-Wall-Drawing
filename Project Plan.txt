@@ -1,0 +1,19 @@
+2/5/18
+Discover how to draw SVG images with JavaScript
+Create a grid with dots on all intersections
+
+2/12/18
+Create OnClick functions to connect dots together with colored lines
+
+2/19/18
+Create Ripple Animation and Create all 7 drawing spaces
+
+2/26/18
+Export drawing to a JSON file
+Develop Popup Menu
+
+3/5/18
+Start explanation sequence
+
+3/12/18
+	

@@ -1,96 +1,269 @@
-"use strict";
+//"use strict"
+//Color Pallet
+var colorRed = '#cc0000'
+var colorBlue = '#3333ff'
+var colorYellow = '#ffcc00'
+var colorDarkGrey = '#848482'
+var colorLightGrey = '#e5e4e2'
+var colorWhite = "#ffffff"
 
-var dotArray = [];
-var gridLines = [];
-var redLines = [];
-var blueLines = [];
-var yellowLines = [];
-var spacing = 50;
-var offset = 10;
+//Constants
+var spacing = 50
+var offset = 10
 
-//Line Creator
-function createLine(id, className, coordX1, coordY1, coordX2, coordY2, color, lineWidth){
-    var line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    line.setAttribute('id', id);
-    line.setAttribute('class', className);
-    line.setAttribute('d', 'M' + coordX1 + ' ' + coordY1 + ' L' + coordX2 + ' ' + coordY2 + ' Z')
-    //line.setAttribute('x1', coordX1);
-    //line.setAttribute('y1', coordY1);
-    //line.setAttribute('x2', coordX2);
-    //line.setAttribute('y2', coordY2);
-    line.setAttribute('stroke', color);
-    line.setAttribute('stroke-width', lineWidth);
-     //document.getElementById('svgCanvas').appendChild(line);
-    return line;
-}
+var draw
 
+var gridLineSet
 
-//Dot Creator
-function createDot(id, className, coordX, coordY, radius, lineColor, lineWidth, fillColor){
-    var dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    dot.setAttribute('id', id);
-    dot.setAttribute('class', className);
-    dot.setAttribute('cx', coordX);
-    dot.setAttribute('cy', coordY);
-    dot.setAttribute('r', radius);
-    dot.setAttribute('stroke', lineColor);
-    dot.setAttribute('stroke-width', lineWidth);
-    dot.setAttribute('fill', fillColor);
-    
-    //dot.setAttribute("onclick", selectDot(xoordX, coordY));
-    return dot;
-}
+var redLineSet
+var blueLineSet
+var yellowLineSet
 
-//Grid Creator
-function createGrid(size){
-    //Create Canvas
-    var svgCanvas = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svgCanvas.setAttribute('id','svgCanvas');
-    svgCanvas.setAttribute('height',(spacing*size+offset*2));
-    svgCanvas.setAttribute('width',(spacing*size+offset*2));
-    svgCanvas.setAttribute("stroke", 2);
-    document.getElementById('main').appendChild(svgCanvas);
-    
-    //Create Correct Number of Line Objects
-    for(var x=0; x<=size; x++){
-        var lineID = 'v'+x;
-        gridLines.push(createLine(lineID, 'vGrid', x*spacing+offset,0+offset,x*spacing+offset,size*spacing+offset,'#A8A8A8',1));
+var allCircleSet
+var primaryCircleSet
+var secondaryCircleSet
+
+var mainMenu
+
+var loggedIn = false
+
+var gridSize = 12
+
+var storedPoint
+
+SVG.on(document, 'DOMContentLoaded', function () {
+    createGrid(gridSize)
+})
+
+function createGrid(size) {
+    draw = SVG('canvas').id('gridCanvas').height(spacing * size + offset * 2).width(spacing * size + offset * 2)
+    gridLineSet = draw.set()
+    allCircleSet = draw.set()
+    primaryCircleSet = draw.set()
+    secondaryCircleSet = draw.set()
+    redLineSet = draw.set()
+    blueLineSet = draw.set()
+    yellowLineSet = draw.set()
+    //Create Vertical Lines
+    for (var x = 0; x <= size; x++) {
+        var lineID = 'v' + x;
+        gridLineSet.add(
+            draw.path()
+            .m({
+                x: x * spacing + offset,
+                y: 0 + offset
+            }).V(size * spacing + offset)
+            .stroke({
+                width: 1,
+                color: colorLightGrey
+            })
+            .id(lineID)
+            .drawAnimated({
+                delay: x * 100 + 1000
+            })
+
+        )
     }
-    for (var y=0; y<=size; y++){
-        var lineID = 'h'+y;
-        gridLines.push(createLine(lineID,'hGrid',0+offset,y*spacing+offset,size*spacing+offset, y*spacing+offset,'#A8A8A8',1));
+    //Create Horizontal Lines
+    for (var y = 0; y <= size; y++) {
+        var lineID = 'h' + y;
+        gridLineSet.add(
+            draw.path()
+            .m({
+                x: 0 + offset,
+                y: y * spacing + offset
+            }).H(size * spacing + offset)
+            .stroke({
+                width: 1,
+                color: colorLightGrey
+            })
+            .id(lineID)
+            .drawAnimated({
+                delay: y * 100
+            })
+        )
     }
-    drawGrid();
+    //Create Circles
+    for (var x = 0; x <= size; x++) {
+        for (var y = 0; y <= size; y++) {
+            var idName = 'h' + x + '|v' + y;
+            var circle = draw.circle(10)
+                .attr({
+                    cx: x * spacing + offset,
+                    cy: y * spacing + offset
+                })
+                .id(idName)
+                .addClass("svgCircle")
+                .fill(colorWhite)
+                .data({
+                    active: false,
+                    primary: true,
+                    xLocation: x,
+                    yLocation: y,
+                    red: false,
+                    blue: false,
+                    yellow: false,
+                })
+                .scale(0.001, 0.001)
+                .on('click', circleClick)
+                .on('mouseover', circleMouseOn)
+                .on('mouseout', circleMouseOff)
+            allCircleSet.add(circle)
+
+
+            //Look for Corners
+            if ((x == 0 && y == 0) || (x == size && y == 0) || (x == 0 && y == size) || (x == size && y == size)) {
+                circle.stroke({
+                        width: 2,
+                        color: colorBlue
+                    })
+                    .data({
+                        'blue': true
+                    })
+                primaryCircleSet.add(circle)
+                //Look for Cardnals
+            } else if ((x == 0 && y == size / 2) || (x == size / 2 && y == 0) || (x == size / 2 & y == size) || (x == size && y == size / 2)) {
+                circle.stroke({
+                        width: 2,
+                        color: colorRed
+                    })
+                    .data('red', true)
+                primaryCircleSet.add(circle)
+                //Look for Center
+            } else if (x == size / 2 && y == size / 2) {
+                circle.stroke({
+                        width: 2,
+                        color: colorYellow
+                    })
+                    .data('yellow', true)
+                primaryCircleSet.add(circle)
+                //Everything Else
+            } else {
+                circle.stroke({
+                        width: 2,
+                        color: colorDarkGrey
+                    })
+                    .data('primary', false)
+                secondaryCircleSet.add(circle)
+            }
+        }
+    }
+    showPrimary(3000 + (gridSize * 2) * 20)
 }
 
-//Creates the Dot Array based on size
-function createDotArray(size){
-    for(var x=0;x<=size;x++){
-        for(var y=0;y<=size;y++){
-            var idName = 'h'+x+'|v'+y;
-            dotArray.push(createDot(idName,'dot',x*spacing+offset,y*spacing+offset,5,'black',2,'white'));
-            drawDots();
+function radiateShowSecondary(x, y, color) {
+    secondaryCircleSet.each(function (i) {
+
+        switch (color) {
+            case colorRed:
+                color = 'red'
+                break;
+            case colorBlue:
+                color = 'blue'
+                break;
+            case colorYellow:
+                color = 'yellow'
+                break;
+        }
+        if (!this.data(color)) {
+            this.animate(500, '<>', (Math.abs(this.data('xLocation') - x) + Math.abs(this.data('yLocation') - y)) * 50)
+                .scale(1, 1)
+                .fill(colorWhite)
+            this.data('active', true)
+        }
+    })
+}
+
+function radiateHideSecondary(x, y) {
+    secondaryCircleSet.each(function (i) {
+        this.animate(500, '<>', (Math.abs(this.data('xLocation') - x) + Math.abs(this.data('yLocation') - y)) * 50)
+            .scale(0.001, 0.001)
+            .fill(colorWhite)
+        this.data('active', false)
+    })
+}
+
+function showPrimary(delay) {
+    primaryCircleSet.animate(500, '<>', delay).scale(1, 1)
+    primaryCircleSet.data('active', true)
+}
+
+function hidePrimary() {
+    primaryCircleSet.animate(500, '<>').scale(0.001, 0.001)
+    primaryCircleSet.data('active', false)
+}
+
+var circleClick = function () {
+    if (this.data('active')) {
+        if (this.data('primary')) {
+            storedPoint = this
+            hidePrimary()
+            radiateShowSecondary(this.data('xLocation'), this.data('yLocation'), this.attr('stroke'))
+        } else {
+            radiateHideSecondary(this.data('xLocation'), this.data('yLocation'))
+            showPrimary()
+            createLine(this)
         }
     }
 }
 
-//Draws the Grid
-function drawGrid(){
-    for(var line in gridLines){
-        document.getElementById('svgCanvas').appendChild(gridLines[line]);
+var circleMouseOn = function () {
+    if (this.data('active')) {
+        this.animate(100, '<>', 0).scale(1.5, 1.5)
     }
-    //Set Grid Drawing Animation
-    //var path = document.querySelector('.vGrid');
-    //var length = path.getTotalLength();
-    //path.style.strokeDasharray = lenght+' '+length;
-    //path.style.strokeDashoffset = length;
 }
 
-//Draws the Dot Array
-function drawDots(){
-    for(var dot in dotArray){
-        document.getElementById('svgCanvas').appendChild(dotArray[dot]);
+var circleMouseOff = function () {
+    if (this.data('active')) {
+        this.animate(100, '<>', 0).scale(1, 1)
     }
 }
-createGrid(11);
-createDotArray(11);
+
+function createLine(secondPoint) {
+
+    var line = draw.path()
+        .m({
+            x: storedPoint.attr('cx'),
+            y: storedPoint.attr('cy')
+        })
+        .L({
+            x: secondPoint.attr('cx'),
+            y: secondPoint.attr('cy')
+        })
+        .stroke(storedPoint.attr('stroke'))
+        .drawAnimated()
+    primaryCircleSet.front()
+    secondaryCircleSet.front()
+    console.log(storedPoint.attr('stroke'))
+    console.log(colorBlue)
+    console.log(storedPoint.attr('stroke') == colorBlue)
+    switch (storedPoint.attr('stroke')) {
+        case colorRed:
+            console.log("2");
+            redLineSet.add(line)
+            secondPoint.data('red', true)
+            break;
+        case colorBlue:
+            blueLineSet.add(line)
+            secondPoint.data('blue', true)
+            break;
+        case colorYellow:
+            yellowLineSet.add(line)
+            secondPoint.data('yellow', true)
+            break;
+    }
+
+}
+
+
+function showMainMenu() {
+    mainMenu = draw.rect(draw.attr('width') * .75, draw.attr('height') * .75)
+        .fill(colorWhite)
+        .stroke({
+            width: 2,
+            color: colorDarkGrey
+        })
+        .center(draw.attr('width') / 2, draw.attr('height') / 2)
+        .scale(0.001, 0.001)
+        .animate(500, '<>', 0).scale(1, 1)
+}

@@ -3,39 +3,66 @@
 
 <head>
     <title>Sol LeWitt Wall Drawing 273</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
-    <!--Google Provided Font-->
-    <link href='https://fonts.googleapis.com/css?family=Alegreya%20Sans%20SC' rel='stylesheet'>
+    <meta charset="utf-8">
 
     <!-- Main Style Sheet-->
     <link rel="stylesheet" href="mainCSS.css" />
+
+    <link rel="stylesheet" href="spinner.css" />
 </head>
 
 <body>
-    <!-- Header -->
-    <div id='header'>
+        <div class="lds-css ng-scope" id="loader"><div style="width:100%;height:100%" id="loader" class="lds-wedges"><div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div></div></div></div>
+    <header>
         <h1>Sol LeWitt Wall Drawing 273</h1>
-    </div>
+    </header>
     <!--End Header -->
 
-    <!-- Main -->
+    <main id='main'>
 
-    <div id='canvas'>
+    </main>
 
+
+
+    <div id="pages">
+        <a id="w1">Wall 1
+            <div class="line" id='red'></div>
+        </a>
+        <a id="w2">Wall 2
+            <div class="line" id='blue'></div>
+        </a>
+        <a id="w3">Wall 3
+            <div class="line" id='yellow'></div>
+        </a>
+        <a id="w4">Wall 4
+            <div class="line" id='red'></div>
+            <div class="line" id='blue'></div>
+        </a>
+        <a id="w5">Wall 5
+            <div class="line" id='red'></div>
+            <div class="line" id='yellow'></div>
+        </a>
+        <a id="w6">Wall 6
+            <div class="line" id='blue'></div>
+            <div class="line" id='yellow'></div>
+        </a>
+        <a id="w7">Wall 7
+            <div class="line" id='red'></div>
+            <div class="line" id='blue'></div>
+            <div class="line" id='yellow'></div>
+        </a>
     </div>
-    <div id='test'>
-        <button type="button" onclick="radiateShowSecondary('5','5','yellow')">Test</button>
-        <button type="button" onclick="showPrimary()">Test2</button>
-    </div>
-    <!-- End Main-->
+    <br>
     <!-- Scripts -->
+    <!--Google Provided Font-->
+    <link href='https://fonts.googleapis.com/css?family=Alegreya%20Sans%20SC' rel='stylesheet'>
     <!-- JQuery hosted by Google-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="svg.js"></script>
     <script src="svg.path.js"></script>
     <script src='drawingScript.js'></script>
     <script src='musicScript.js'></script>
+
     <!-- End Scripts -->
 
 
@@ -43,10 +70,9 @@
 
 
     <!-- Start Footer-->
-    <div id="footer">
+    <footer>
         <p>&copy; 2017-2018 Taylor Scafe</p>
-        </a>
-    </div>
+    </footer>
     <!--End Footer-->
 </body>
 

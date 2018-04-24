@@ -31,12 +31,18 @@ var gridSize = 12
 
 var storedPoint
 
+var noDelay = false
+
 SVG.on(document, 'DOMContentLoaded', function () {
+    setTimeout(function(){
+    document.getElementById('loader').remove()
+    document.getElementsByTagName('html')[0].style['overflow'] ='visible'
     createGrid(gridSize)
+    },2500)
 })
 
 function createGrid(size) {
-    draw = SVG('canvas').id('gridCanvas').height(spacing * size + offset * 2).width(spacing * size + offset * 2)
+    draw = SVG('main').id('gridCanvas').height(spacing * size + offset * 2).width(spacing * size + offset * 2)
     gridLineSet = draw.set()
     allCircleSet = draw.set()
     primaryCircleSet = draw.set()
@@ -151,9 +157,11 @@ function createGrid(size) {
     showPrimary(3000 + (gridSize * 2) * 20)
 }
 
-function radiateShowSecondary(x, y, color) {
+function radiateShowSecondary(x, y, color, delay) {
     secondaryCircleSet.each(function (i) {
-
+        if (noDelay){
+            delay = 0
+        }
         switch (color) {
             case colorRed:
                 color = 'red'
@@ -166,7 +174,7 @@ function radiateShowSecondary(x, y, color) {
                 break;
         }
         if (!this.data(color)) {
-            this.animate(500, '<>', (Math.abs(this.data('xLocation') - x) + Math.abs(this.data('yLocation') - y)) * 50)
+            this.animate(500, '<>', (Math.abs(this.data('xLocation') - x) + Math.abs(this.data('yLocation') - y)) * delay)
                 .scale(1, 1)
                 .fill(colorWhite)
             this.data('active', true)
@@ -174,9 +182,12 @@ function radiateShowSecondary(x, y, color) {
     })
 }
 
-function radiateHideSecondary(x, y) {
+function radiateHideSecondary(x, y, delay) {
+    if (noDelay){
+        delay = 0
+    }
     secondaryCircleSet.each(function (i) {
-        this.animate(500, '<>', (Math.abs(this.data('xLocation') - x) + Math.abs(this.data('yLocation') - y)) * 50)
+        this.animate(500, '<>', (Math.abs(this.data('xLocation') - x) + Math.abs(this.data('yLocation') - y)) * delay)
             .scale(0.001, 0.001)
             .fill(colorWhite)
         this.data('active', false)
@@ -194,13 +205,14 @@ function hidePrimary() {
 }
 
 var circleClick = function () {
+    secondaryCircleSet.stop()
     if (this.data('active')) {
         if (this.data('primary')) {
             storedPoint = this
             hidePrimary()
-            radiateShowSecondary(this.data('xLocation'), this.data('yLocation'), this.attr('stroke'))
+            radiateShowSecondary(this.data('xLocation'), this.data('yLocation'), this.attr('stroke'), 500/gridSize)
         } else {
-            radiateHideSecondary(this.data('xLocation'), this.data('yLocation'))
+            radiateHideSecondary(this.data('xLocation'), this.data('yLocation'), 1000/gridSize)
             showPrimary()
             createLine(this)
         }
@@ -234,12 +246,8 @@ function createLine(secondPoint) {
         .drawAnimated()
     primaryCircleSet.front()
     secondaryCircleSet.front()
-    console.log(storedPoint.attr('stroke'))
-    console.log(colorBlue)
-    console.log(storedPoint.attr('stroke') == colorBlue)
     switch (storedPoint.attr('stroke')) {
         case colorRed:
-            console.log("2");
             redLineSet.add(line)
             secondPoint.data('red', true)
             break;
@@ -252,7 +260,6 @@ function createLine(secondPoint) {
             secondPoint.data('yellow', true)
             break;
     }
-
 }
 
 
@@ -267,3 +274,5 @@ function showMainMenu() {
         .scale(0.001, 0.001)
         .animate(500, '<>', 0).scale(1, 1)
 }
+
+

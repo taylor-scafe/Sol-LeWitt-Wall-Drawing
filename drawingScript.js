@@ -34,11 +34,11 @@ var storedPoint
 var noDelay = false
 
 SVG.on(document, 'DOMContentLoaded', function () {
-    setTimeout(function(){
-    document.getElementById('loader').remove()
-    document.getElementsByTagName('html')[0].style['overflow'] ='visible'
-    createGrid(gridSize)
-    },2500)
+    setTimeout(function () {
+        document.getElementsByClassName('loader')[0].remove()
+        document.getElementsByTagName('html')[0].style['overflow'] = 'visible'
+        createGrid(gridSize)
+    }, 2500)
 })
 
 function createGrid(size) {
@@ -159,7 +159,7 @@ function createGrid(size) {
 
 function radiateShowSecondary(x, y, color, delay) {
     secondaryCircleSet.each(function (i) {
-        if (noDelay){
+        if (noDelay) {
             delay = 0
         }
         switch (color) {
@@ -183,7 +183,7 @@ function radiateShowSecondary(x, y, color, delay) {
 }
 
 function radiateHideSecondary(x, y, delay) {
-    if (noDelay){
+    if (noDelay) {
         delay = 0
     }
     secondaryCircleSet.each(function (i) {
@@ -210,9 +210,9 @@ var circleClick = function () {
         if (this.data('primary')) {
             storedPoint = this
             hidePrimary()
-            radiateShowSecondary(this.data('xLocation'), this.data('yLocation'), this.attr('stroke'), 500/gridSize)
+            radiateShowSecondary(this.data('xLocation'), this.data('yLocation'), this.attr('stroke'), 500 / gridSize)
         } else {
-            radiateHideSecondary(this.data('xLocation'), this.data('yLocation'), 1000/gridSize)
+            radiateHideSecondary(this.data('xLocation'), this.data('yLocation'), 1000 / gridSize)
             showPrimary()
             createLine(this)
         }
@@ -261,18 +261,12 @@ function createLine(secondPoint) {
             break;
     }
 }
-
-
-function showMainMenu() {
-    mainMenu = draw.rect(draw.attr('width') * .75, draw.attr('height') * .75)
-        .fill(colorWhite)
-        .stroke({
-            width: 2,
-            color: colorDarkGrey
-        })
-        .center(draw.attr('width') / 2, draw.attr('height') / 2)
-        .scale(0.001, 0.001)
-        .animate(500, '<>', 0).scale(1, 1)
+function toggleAnimation(){
+    if (noDelay){
+        document.getElementById('animation').style.textDecoration ="none"
+    }
+    else{
+        document.getElementById('animation').style.textDecoration ="line-through"
+    }
+    noDelay = !noDelay
 }
-
-

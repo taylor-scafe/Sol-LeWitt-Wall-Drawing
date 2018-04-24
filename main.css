@@ -14,46 +14,29 @@ main {
     margin: auto;
 }
 
-table {
-    float: center;
-    float: center;
-    margin: auto
-}
-
-table,
-td,
-th {
-    border: 1px solid #ddd;
-    border-collapse: collapse;
-}
-
-td {
-    text-align: center;
-    width: 50px;
-    color: green;
-}
-
 footer {
     bottom: 0;
     left: 0;
     right: 0;
 }
+a{
+    font-size: 20px;
+}
 
-
-#pages {
+.selection {
     display: inline-block;
     *display: inline;
     zoom: 1;
 }
-#pages a {
+.selection a {
     float: left;
     display: block;
     color: black;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
-    font-size: 17px;
-    border-color: black
+    border-color: black;
+    cursor: pointer;
 }
 
 
@@ -72,24 +55,12 @@ footer {
     margin: 0px;
     width: 100%
 }
-#red{
+.red{
     background-color: #cc0000;
 }
-#blue{
+.blue{
     background-color: #3333ff;
 }
-#yellow{
+.yellow{
     background-color: #ffcc00;
 }
-#loader{
-    height: 100vh;
-    width: 100vw;
-    background-color: white;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 999;
-    margin: auto;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-  }

@@ -35,7 +35,7 @@ var noDelay = false
 
 SVG.on(document, 'DOMContentLoaded', function () {
     setTimeout(function () {
-        document.getElementsByClassName('loader')[0].remove()
+        document.getElementsByClassName('loader')[0].style.display = 'none'
         document.getElementsByTagName('html')[0].style['overflow'] = 'visible'
         createGrid(gridSize)
     }, 2500)
@@ -231,7 +231,7 @@ var circleMouseOff = function () {
     }
 }
 
-function createLine(secondPoint) {
+function createLine(secondPoint, delay) {
 
     var line = draw.path()
         .m({
@@ -243,7 +243,9 @@ function createLine(secondPoint) {
             y: secondPoint.attr('cy')
         })
         .stroke(storedPoint.attr('stroke'))
-        .drawAnimated()
+        .drawAnimated({
+            delay: 100 * delay
+        })
     primaryCircleSet.front()
     secondaryCircleSet.front()
     switch (storedPoint.attr('stroke')) {
@@ -261,12 +263,12 @@ function createLine(secondPoint) {
             break;
     }
 }
-function toggleAnimation(){
-    if (noDelay){
-        document.getElementById('animation').style.textDecoration ="none"
-    }
-    else{
-        document.getElementById('animation').style.textDecoration ="line-through"
+
+function toggleAnimation() {
+    if (noDelay) {
+        document.getElementById('animation').style.textDecoration = "none"
+    } else {
+        document.getElementById('animation').style.textDecoration = "line-through"
     }
     noDelay = !noDelay
 }

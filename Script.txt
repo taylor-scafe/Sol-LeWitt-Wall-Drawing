@@ -1,0 +1,19 @@
+Sol Lewitt was an american artist who created many art peices through sets of instructions. These are the instructions of Wall Drawing 273
+
+A six-inch (15 cm) grid covering the walls.
+
+1st wall: Red lines from the midpoints of four sides;
+
+2nd wall: Blue lines from four corners;
+
+3rd wall: Yellow lines from the center;
+
+4th wall: Red lines from the midpoints of four sides, blue lines from four corners;
+
+5th wall: Red lines from the midpoints of four sides, yellow lines from the center;
+
+6th wall: Blue lines from four corners, yellow lines from the center;
+
+7th wall: Red lines from the midpoints of four sides, blue lines from four corners, yellow lines from the center.
+
+Each wall has an equal number of lines. (The number of lines and their length are determined by the draftsman.)
